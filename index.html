@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anh xin lỗi yêu...</title>
+
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(#1e1e1e,#000);
+    font-family:'Segoe UI',sans-serif;
+    color:white;
+}
+
+/* Rain */
+.rain{
+    position:fixed;
+    width:2px;
+    height:15px;
+    background:rgba(255,255,255,0.3);
+    animation:fall linear infinite;
+}
+@keyframes fall{
+    to{transform:translateY(100vh);}
+}
+
+/* Card */
+.card{
+    background:rgba(0,0,0,0.6);
+    padding:40px 30px;
+    border-radius:25px;
+    width:90%;
+    max-width:380px;
+    text-align:center;
+    position:relative;
+    z-index:2;
+}
+
+.cat{
+    font-size:60px;
+    animation:shake 1.5s infinite;
+}
+@keyframes shake{
+    0%,100%{transform:translateX(0);}
+    50%{transform:translateX(-5px);}
+}
+
+.typing{
+    min-height:70px;
+    font-size:15px;
+    opacity:0.9;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border:none;
+    border-radius:25px;
+    font-size:15px;
+    cursor:pointer;
+}
+
+#yes{
+    background:#ff4d6d;
+    color:white;
+}
+#no{
+    background:#555;
+    color:white;
+    position:fixed;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+<div class="cat">🐱💔</div>
+<h2>Anh xin lỗi yêu...</h2>
+<div class="typing" id="text"></div>
+
+<button id="yes">Tha lỗi cho anh...</button>
+<button id="no">Không 😔</button>
+</div>
+
+<script>
+// ===== Rain effect =====
+function createRain(){
+    const drop=document.createElement("div");
+    drop.classList.add("rain");
+    drop.style.left=Math.random()*100+"vw";
+    drop.style.animationDuration=(Math.random()*0.5+0.5)+"s";
+    document.body.appendChild(drop);
+    setTimeout(()=>{drop.remove();},1000);
+}
+setInterval(createRain,50);
+
+// ===== Typing effect =====
+const message=[
+"Anh biết anh đã làm yêu buồn...",
+"Mỗi lần yêu im lặng tim anh đau lắm...",
+"Anh không muốn mất yêu...",
+"Cho anh một cơ hội sửa sai được không... 🥺"
+];
+
+let i=0,j=0;
+const textEl=document.getElementById("text");
+
+function type(){
+    if(i<message.length){
+        if(j<message[i].length){
+            textEl.innerHTML+=message[i].charAt(j);
+            j++;
+            setTimeout(type,40);
+        }else{
+            textEl.innerHTML+="<br>";
+            i++; j=0;
+            setTimeout(type,500);
+        }
+    }
+}
+type();
+
+// ===== Trái tim vỡ =====
+function brokenHeart(){
+    const heart=document.createElement("div");
+    heart.innerHTML="💔";
+    heart.style.position="fixed";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.top=Math.random()*100+"vh";
+    heart.style.fontSize="30px";
+    heart.style.transition="1s";
+    document.body.appendChild(heart);
+    setTimeout(()=>{
+        heart.style.opacity="0";
+        heart.style.transform="scale(2)";
+    },50);
+    setTimeout(()=>{heart.remove();},1000);
+}
+
+// ===== Nút từ chối chạy quanh nút đồng ý =====
+const noBtn=document.getElementById("no");
+const yesBtn=document.getElementById("yes");
+
+function moveAroundYes(){
+    const yesRect = yesBtn.getBoundingClientRect();
+    const radius = 120;
+    const angle = Math.random() * 2 * Math.PI;
+
+    let newX = yesRect.left + Math.cos(angle)*radius;
+    let newY = yesRect.top + Math.sin(angle)*radius;
+
+    // Giữ trong màn hình
+    newX = Math.max(10, Math.min(window.innerWidth - 120, newX));
+    newY = Math.max(10, Math.min(window.innerHeight - 50, newY));
+
+    noBtn.style.left=newX+"px";
+    noBtn.style.top=newY+"px";
+}
+
+// chạy khi hover hoặc click
+noBtn.addEventListener("mouseover",moveAroundYes);
+noBtn.addEventListener("click",function(){
+    brokenHeart();
+    moveAroundYes();
+    noBtn.innerText="Đừng mà yêu 😭";
+});
+
+// ===== Happy ending =====
+yesBtn.onclick=function(){
+    document.body.style.background="linear-gradient(#ff758c,#ff7eb3)";
+    document.body.innerHTML=`
+    <div style="text-align:center;color:white">
+        <div style="font-size:70px">🐱💖</div>
+        <h1>Cảm ơn yêu đã tha lỗi 😭💕</h1>
+        <p>Anh hứa sẽ không làm yêu buồn nữa...</p>
+    </div>`;
+};
+</script>
+
+</body>
+</html>
